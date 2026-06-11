@@ -44,4 +44,9 @@ public class NotesService {
         notesRepository.delete(exisingNode);
 
     }
+
+    public List<Notes> searchNotes(String keyword){
+        return notesRepository
+                .findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(keyword, keyword);
+    }
 }

@@ -2,6 +2,7 @@ package com.example.notes.controller;
 
 import com.example.notes.entity.Notes;
 import com.example.notes.service.NotesService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class NotesController {
     }
 
     @PostMapping("/notes")
-    public void createNote(@RequestBody Notes note){
+    public void createNote(@Valid @RequestBody Notes note){
         notesService.createNote(note);
     }
 
@@ -32,12 +33,17 @@ public class NotesController {
     }
 
     @PutMapping("/notes/{id}")
-    public void updateNotes(@PathVariable Long id, @RequestBody Notes request){
+    public void updateNotes(@PathVariable Long id, @Valid @RequestBody Notes request){
         notesService.updateNotes(id, request);
     }
 
     @DeleteMapping("/notes/{id}")
     public void deleteNote(@PathVariable Long id){
         notesService.deleteNode(id);
+    }
+
+    @GetMapping("/search")
+    public List<Notes> searchNotes(@RequestParam String keyword){
+        return notesService.searchNotes(keyword);
     }
 }
