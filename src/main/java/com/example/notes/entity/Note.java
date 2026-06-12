@@ -4,6 +4,7 @@ import com.example.notes.enums.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,21 +12,13 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="notes")
-public class Notes {
+public class Note {
 
     @Id
-    @SequenceGenerator(
-            name = "notes_sequence",
-            sequenceName = "notes_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "notes_sequence"
-    )
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(max = 100)
     @NotBlank(message = "Title cannot be empty")
     private String title;
 
@@ -43,11 +36,17 @@ public class Notes {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private boolean archived = false;
 
-    public Notes() {
+    @Column(nullable = false)
+    private boolean isPinned = false;
+
+
+    public Note() {
     }
 
-    public Notes(String title, String content, Category category) {
+    public Note(String title, String content, Category category) {
         this.title = title;
         this.content = content;
         this.category = category;
@@ -100,6 +99,22 @@ public class Notes {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
+
+    public boolean isPinned() {
+        return isPinned;
+    }
+
+    public void setPinned(boolean pinned) {
+        isPinned = pinned;
     }
 
     @Override
